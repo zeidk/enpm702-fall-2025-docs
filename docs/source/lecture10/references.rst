@@ -9,7 +9,7 @@ References
     .. card::
         :class-card: sd-border-secondary
         
-        `Lecture 10 (slides) <https://drive.google.com/file/d/1W6VxdP0b2UbM9e2QrauoYyhvxEozSnM8/view?usp=sharing>`_
+        `Lecture 10 (slides) <https://drive.google.com/file/d/1G-2L-i-KzkgY01uDVCCHyiyZedd_vLW1/view?usp=sharing>`_
         
         Covers ROS 2 fundamentals, nodes, and the build system.
 

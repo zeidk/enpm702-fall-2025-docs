@@ -34,4 +34,5 @@ Learning Outcomes (high level)
    lecture8/lecture8
    lecture9/lecture9
    lecture10/lecture10
+   lecture11/index
    assignments
