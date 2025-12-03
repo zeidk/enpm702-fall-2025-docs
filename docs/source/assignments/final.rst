@@ -2,7 +2,7 @@
 .. _final_project_micromouse_ros2:
 
 =========================================================
-Assignment - MicroMouse ROS2 Navigation
+Final Project
 =========================================================
 
 .. admonition:: Changelog
