@@ -11,3 +11,4 @@ List of assignments
 
    assignments/rwaIII
    assignments/rwaIV
+   assignments/final
