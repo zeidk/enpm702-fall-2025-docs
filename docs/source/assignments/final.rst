@@ -84,7 +84,7 @@ After completing this assignment, you will understand:
 - **Parameters**: Loading configuration from YAML files
 - **Topics**: Publishing continuous robot position data
 - **Services**: Request/response pattern for querying robot status
-- **Actions**: Long-running navigation tasks with feedback and cancellation
+- **Actions**: Long-running navigation tasks with feedback and cancellation (Ctrl+C)
 
 **Key System Features:**
 
@@ -93,7 +93,27 @@ After completing this assignment, you will understand:
 - **Service Server** — Respond to status queries (PROVIDED)
 - **Service Client** — Query robot status as a standalone node
 - **Action Server** — Handle navigation goals with feedback
-- **Action Client** — Send goals and monitor progress
+- **Action Client** — Send goals, monitor progress, and cancel with Ctrl+C
+
+System Communication
+^^^^^^^^^^^^^^^^^^^^^
+
+The following diagram illustrates the communication flow between all ROS2 components. The sequence diagram shows initialization, standalone mode, action mode, service queries, and topic monitoring.
+
+.. only:: html
+
+   .. figure:: ../_static/final/final_sequence_diagram_light.png
+      :alt: MicroMouse ROS2 Communication Sequence Diagram
+      :align: center
+      :width: 90%
+      :class: only-light
+
+   .. figure:: ../_static/final/final_sequence_diagram_dark.png
+      :alt: MicroMouse ROS2 Communication Sequence Diagram
+      :align: center
+      :width: 90%
+      :class: only-dark
+
 
 ---------------------------------------------------------
 Simulator
@@ -773,9 +793,21 @@ In ``navigate_action_client.cpp``, implement the action client callbacks.
 
 **Implement callbacks:**
 
-- ``goal_response_callback()``: Check if goal accepted, log result
+- ``goal_response_callback()``: Check if goal accepted, store goal handle, log result
 - ``feedback_callback()``: Log position, direction (use constants), elapsed time
-- ``result_callback()``: Log result code and details, shutdown node
+- ``result_callback()``: Clear goal handle, log result code and details, shutdown node
+
+.. note::
+
+   **Ctrl+C Cancellation (PROVIDED)**
+   
+   The signal handler for Ctrl+C cancellation is **fully provided** in the starter code. This includes:
+   
+   - ``signal_handler()`` — Catches SIGINT (Ctrl+C) and forwards to ``cancel_goal()``
+   - ``cancel_goal()`` — Sends cancel request to the action server
+   - ``goal_handle_`` member — Stores the goal handle for cancellation support
+   
+   You must still implement ``goal_response_callback()`` to **store the goal handle** in ``goal_handle_``, and ``result_callback()`` to **clear the goal handle** (set to ``nullptr``). Without these, cancellation will not work.
 
 **Verification:**
 
@@ -785,6 +817,34 @@ In ``navigate_action_client.cpp``, implement the action client callbacks.
     
     # Terminal 2: Run the action client
     ros2 run micromouse_cpp navigate_action_client --ros-args -p goal_x:=7 -p goal_y:=7
+
+**Testing Cancellation:**
+
+To verify that Ctrl+C cancellation works correctly:
+
+.. code-block:: bash
+
+    # Terminal 1: Start MMS with standalone_mode:=false
+    
+    # Terminal 2: Send a goal to a distant location
+    ros2 run micromouse_cpp navigate_action_client --ros-args -p goal_x:=15 -p goal_y:=15
+    
+    # While robot is navigating, press Ctrl+C in Terminal 2
+
+**Expected behavior when pressing Ctrl+C:**
+
+1. Action client logs: ``"Cancelling goal..."``
+2. Action client logs: ``"=== NAVIGATION CANCELED ==="``
+3. Result shows ``success: false`` and ``message: "Navigation cancelled"``
+4. Robot stops navigating in MMS
+5. Node shuts down gracefully
+
+.. warning::
+
+   If pressing Ctrl+C causes the client to exit immediately **without** sending a cancel request (robot keeps moving), check that:
+   
+   - ``goal_handle_`` is stored in ``goal_response_callback()``
+   - ``goal_handle_`` is cleared in ``result_callback()``
 
 Task 6: Implement Service Client (15 pts)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -912,6 +972,18 @@ Action Mode (Client-Triggered Navigation)
        # Terminal 3: Query robot status
        ros2 run micromouse_cpp get_status_client
 
+5. Test cancellation (press Ctrl+C in the action client terminal):
+
+   .. code-block:: bash
+   
+       # While robot is navigating, press Ctrl+C
+       # Expected output:
+       # [INFO] Cancelling goal...
+       # [WARN] === NAVIGATION CANCELED ===
+       # [INFO] Result:
+       # [INFO]   Success: false
+       # [INFO]   Message: Navigation cancelled
+
 ---------------------------------------------------------
 Demo Video
 ---------------------------------------------------------
@@ -924,9 +996,11 @@ The video demonstrates:
 
 1. Building the packages
 2. Configuring MMS with the run command
-3. Running in standalone mode with topic monitoring
-4. Running in action mode with feedback
-5. Using the service client to query status
+3. Running in standalone mode
+4. Running in action mode (with feedback)
+5. Monitoring topic
+6. Using the service client to query status
+7. Cancelling navigation with Ctrl+C
 
 ---------------------------------------------------------
 Provided Code
@@ -939,6 +1013,7 @@ The following components are **provided** and should **not be modified**:
 - ``dfs_plan()`` — Path planning using Depth-First Search
 - Wall sensing and movement functions
 - **Service server** — ``/get_robot_status`` service is fully implemented
+- **Signal handler** — Ctrl+C cancellation in action client (``signal_handler()``, ``cancel_goal()``)
 - Main function structure
 - Header files for action client and service client
 
@@ -976,6 +1051,8 @@ Submission Checklist
      - Action server callbacks implemented with feedback using constants
    * - [ ]
      - Action client implemented and receiving feedback
+   * - [ ]
+     - Action client Ctrl+C cancellation works (robot stops, result shows CANCELED)
    * - [ ]
      - Service client implemented and receiving response
    * - [ ]
@@ -1015,7 +1092,7 @@ Grading Rubric
      - All three callbacks implemented; goal acceptance works; feedback uses constants; result sent
    * - Action Client
      - 20 pts
-     - All callbacks implemented; goal sent successfully; feedback logged with constants; result handled
+     - All callbacks implemented; goal sent successfully; feedback logged with constants; Ctrl+C cancellation works; result handled
    * - Service Client
      - 15 pts
      - Client created; request sent; response logged correctly; runs as standalone node
@@ -1065,7 +1142,7 @@ Running Nodes
         -p standalone_mode:=false \
         --params-file /path/to/params.yaml
     
-    # Action client
+    # Action client (press Ctrl+C to cancel navigation)
     ros2 run micromouse_cpp navigate_action_client --ros-args \
         -p goal_x:=7 -p goal_y:=7
     
