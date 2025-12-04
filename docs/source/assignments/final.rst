@@ -28,7 +28,7 @@ Final Project
    :class: compact-table
 
    * - **Due Date**
-     - 12/12/2025
+     - 12/13/2025
    * - **Points**
      - 100 pts
    * - **Work Mode**
