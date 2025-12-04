@@ -681,7 +681,7 @@ Task 2: Create ``params.yaml`` (10 pts)
 
 .. todo::
  
-    Create ``config/params.yaml`` in the ``micromouse_cpp`` package with the following parameters:
+    Implement ``config/params.yaml`` in the ``micromouse_cpp`` package with the following parameters:
 
 
 .. list-table::
