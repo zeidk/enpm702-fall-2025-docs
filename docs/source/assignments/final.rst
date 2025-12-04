@@ -1063,7 +1063,7 @@ Submission Checklist
    * - [ ]
      - Code follows C++ best practices and ROS2 conventions
    * - [ ]
-     - Group members' names in both `package.xml` (remove my name)
+     - Group members' names in both `package.xml` (remove my name from the provided `package.xml`)
 
 ---------------------------------------------------------
 Grading Rubric
