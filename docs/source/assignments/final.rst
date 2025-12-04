@@ -13,8 +13,9 @@ Final Project
 .. admonition:: Resources
    :class: resources
 
-   - ⚙️ `Starter Code <https://github.com/zeidk/enpm702-fall-2025/tree/main/rwa_micromouse_ros2>`_
-   - 🎥 `Demo Video <https://www.youtube.com/watch?v=PLACEHOLDER_VIDEO_ID>`_
+   - ⚙️ `Starter Code <https://github.com/zeidk/enpm702-fall-2025-ROS/tree/main/final_starter/micromouse_cpp>`_
+   - 🎥 `Demo Video <https://drive.google.com/file/d/1HK9yq_aKyOCe_Via429ekpd6PcMsQt5u/view?usp=sharing>`_
+   - 📖 Slides for Lecture 12 (v2.0) - Canvas or `Google Drive <https://drive.google.com/file/d/1KoLZ5owrVZy_j06yUbwYXtujeIE2fdg_/view?usp=sharing>`_ 
    - 🔗 `MicroMouse Simulator (main) <https://github.com/mackorone/mms>`_
    - 🔗 `MicroMouse Simulator (API) <https://github.com/mackorone/mms#mouse-api>`_
    - 🔗 `MicroMouse Simulator (maze files) <https://github.com/mackorone/mms#maze-files>`_
@@ -450,7 +451,7 @@ You will work with two ROS2 packages:
 .. code-block:: text
 
     ros2_ws/src/
-    ├── micromouse_interfaces/     # YOU CREATE THIS
+    ├── micromouse_interfaces/     # TODO: CREATE THIS
     │   ├── action/
     │   │   └── NavigateToGoal.action
     │   ├── srv/
@@ -470,7 +471,7 @@ You will work with two ROS2 packages:
         │   ├── navigate_action_client.cpp # TODO: Implement callbacks
         │   └── get_status_client.cpp     # TODO: Implement callbacks
         ├── config/
-        │   └── params.yaml               # TODO: Create parameter file
+        │   └── params.yaml               # TODO: Implement
         ├── CMakeLists.txt                # PROVIDED
         └── package.xml                   # PROVIDED
 
@@ -990,7 +991,7 @@ Demo Video
 
 Watch the demonstration video to see the expected behavior:
 
-🎥 `MicroMouse ROS2 Demo Video <https://www.youtube.com/watch?v=PLACEHOLDER_VIDEO_ID>`_
+🎥 `MicroMouse ROS2 Demo Video <https://drive.google.com/file/d/1HK9yq_aKyOCe_Via429ekpd6PcMsQt5u/view?usp=sharing>`_
 
 The video demonstrates:
 
