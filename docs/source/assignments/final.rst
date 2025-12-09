@@ -243,7 +243,7 @@ This approach meant the robot would repeatedly attempt to visit cells it couldn'
 The provided implementation maintains a **persistent wall map** that is consulted during path planning:
 
 1. **Wall Array**: A 3D array ``walls[x][y][direction]`` stores all discovered walls
-2. **Planning Uses Walls**: The ``DFS_PLAN`` function only considers neighbors where ``walls[x][y][dir] == false``
+2. **Planning Uses Walls**: The ``dfs_plan()`` method only considers neighbors where ``walls[x][y][dir] == false``
 3. **Bidirectional Updates**: When a wall is sensed, both sides are marked (e.g., wall to the North of (2,3) also means wall to the South of (2,4))
 4. **Accumulated Knowledge**: Wall information persists across replanning cycles, so the robot never "forgets" discovered walls
 
